@@ -1,0 +1,42 @@
+<h2>New Patient Sign-Up</h2>
+<%= form_for(@user , url: patient_signup_path) do |f| %>
+  <% if @user.role.errors.any? %>
+    <h3>Patient Field Errors:</h3>
+    <ul class="errors">
+      <% @user.role.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+    <br>
+  <% end %>
+  <% if @user.errors.any? %>
+    <h3>User Field Errors:</h3>
+    <ul class="errors">
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+    <br>
+  <% end %>
+  <%= f.fields_for(:role, Patient.new) do |ff| %>
+    First Name: <%= ff.text_field :first_name %>
+    <br>
+    <br>
+    Last Name: <%= ff.text_field :last_name %>
+  <% end %>
+  <br>
+  <br>
+  <%= f.label "E-Mail:" %>
+  <%= f.text_field(:email, id: "email") %>
+  <br>
+  <br>
+  <%= f.label "Password:" %>
+  <%= f.password_field(:password, id: "password") %>
+  <br>
+  <br>
+  Confirm Password: <%= f.password_field(:password_confirmation, id: "password_confirmation") %>
+  <br>
+  <br>
+  <br>
+  <%= f.submit "Sign Up"%>
+<% end %>

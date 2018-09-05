@@ -1,0 +1,20 @@
+<% if logged_in? %>
+  <h3>Welcome back, <%= current_user.role.first_name %>!</h3>
+  <% if current_user.role_type == "Doctor" %>
+    <%= link_to "My Profile", specialty_doctor_path(current_user.role.specialty, current_user.role) %>
+  <% else %>
+    <%= link_to "My Profile", patient_path(current_user.role) %>
+  <% end %>
+  <br>
+  <%= link_to "Medical Specialties", specialties_path %>
+  <br>
+  <%= link_to "Registered Physcians", doctors_path %>
+<% else %>
+  <h3>Welcome!</h3>
+  <%= link_to "Sign Up as a New Doctor", doctor_signup_path %>
+  <br>
+  <%= link_to "Sign Up as a New Patient", patient_signup_path %>
+  <p>
+    Already have an account? <%= link_to "Log In", login_path %>
+  </p>
+<% end %>

@@ -1,0 +1,24 @@
+<h2>Report New Ailment</h2>
+<%= form_for @ailment do |f| %>
+  <% if @ailment.errors.any? %>
+    <h3>Errors:</h3>
+    <ul class="errors">
+      <% @ailment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+    <br>
+  <% end %>
+  <%= f.label "When did you first notice the issue?" %>
+  <br>
+  <%= f.date_field(:first_noticed_on, id: "first_noticed_on", max: Date.today) %>
+  <br>
+  <br>
+  Brief Description:
+  <br>
+  <%= f.text_area(:description, id: "description") %>
+  <br>
+  <br>
+  <br>
+  <%= f.submit "Report Ailment" %>
+<% end %>

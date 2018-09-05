@@ -1,0 +1,15 @@
+<h2><%= @specialty.name %></h2>
+<h3>Registered Physicians:</h3>
+<ul>
+  <% @doctors.each do |doctor| %>
+    <li>
+      <%= link_to "Dr. #{doctor.full_name}", specialty_doctor_path(doctor.specialty, doctor) %>
+    </li>
+  <% end %>
+</ul>
+<br>
+<br>
+<%= link_to "All Medical Specialties", specialties_path %>
+<br>
+<%= link_to "All Registered Physicians", doctors_path %>
+<br>

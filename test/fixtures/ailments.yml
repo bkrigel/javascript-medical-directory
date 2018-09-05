@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  description: MyText
+  length_in_days: 1
+  resolved_status: false
+  patient_id: 1
+
+two:
+  description: MyText
+  length_in_days: 1
+  resolved_status: false
+  patient_id: 1

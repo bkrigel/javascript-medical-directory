@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  scheduled_for: 2018-08-01 16:07:56
+  duration_in_minutes: 1
+  doctor_id: 1
+  patient_id: 1
+
+two:
+  scheduled_for: 2018-08-01 16:07:56
+  duration_in_minutes: 1
+  doctor_id: 1
+  patient_id: 1

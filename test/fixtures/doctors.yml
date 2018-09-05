@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  first_name: MyString
+  last_name: MyString
+  location_city: MyString
+  years_in_practice: 1
+  specialty_id: 1
+
+two:
+  first_name: MyString
+  last_name: MyString
+  location_city: MyString
+  years_in_practice: 1
+  specialty_id: 1

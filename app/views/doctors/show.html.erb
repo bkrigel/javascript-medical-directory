@@ -1,0 +1,116 @@
+<h2><%= @doctor.full_name %>, M.D.</h2>
+- <i><%= link_to @doctor.specialty.name, specialty_path(@doctor.specialty) %></i>
+<% if current_user.role == @doctor %>
+  <br>
+  <br>
+  <h3>My Public Profile:</h3>
+<% end %>
+<ul>
+  <li>
+    <% if current_user.role == @doctor %>
+      You have
+    <% else %>
+      Dr. <%= @doctor.last_name %> has
+    <% end %>
+    been in practice for <%= @doctor.years_in_practice %> years
+  </li>
+  <li>
+    Located in <%= @doctor.location_city %>
+  </li>
+  <li>
+    Connected with <%= @patients.count %> patients through <i>Ben's Medical Directory</i>
+  </li>
+</ul>
+<% if current_user.role_type == "Patient" %>
+  <br>
+  <%= link_to "Schedule New Appointment", new_appointment_path %>
+  <br>
+  <br>
+<% end %>
+<br>
+<% if current_user.role == @doctor %>
+  <h3>My Upcoming Appointments:</h3>
+  <% if @appointments.empty? %>
+    <small><i>You have no scheduled appointments.</i></small>
+    <br>
+    <br>
+  <% end %>
+  <% @appointments.each do |appointment| %>
+    <ul>
+      <li>
+        <small><i>Patient:</i></small> <%= link_to appointment.patient.full_name, patient_path(appointment.patient) %>
+      </li>
+      <li>
+        <small><i>Date/Time:</i></small> <%= link_to appointment.scheduled_for.strftime("%A, %b. %-d, %Y @ %l:%M %P"), appointment_path(appointment) %>
+      </li>
+      <li>
+        <small><i>Duration:</i></small> <%= appointment.duration_in_minutes %> min.
+      </li>
+      <li>
+        <small><i>Reason:</i></small> <%= appointment.ailment.description %>
+      </li>
+      <%= form_tag appointment_path(appointment), method: 'delete' do %>
+        <%= hidden_field_tag "id", appointment.id %>
+        <%= submit_tag "Cancel Appointment" %>
+      <% end %>
+    </ul>
+  <% end %>
+  <br>
+  <h3>My Patients:</h3>
+  <% if @patients.empty? %>
+    <small><i>You have no patients.</i></small>
+    <br>
+    <br>
+  <% end %>
+  <ul>
+    <% @patients.each do |patient| %>
+      <li>
+        <%= link_to patient.full_name, patient_path(patient) %>
+      </li>
+    <% end %>
+  </ul>
+  <br>
+  <h3>
+    My Prescriptions:
+  </h3>
+  <% if @prescriptions.empty? && @appointments.empty? %>
+    <small><i>You have no prescriptions.</i></small>
+    <br>
+    <br>
+  <% elsif @prescriptions.empty? && !@appointments.empty? %>
+    <small><i>You have no prescriptions. Click <%= link_to "here", new_prescription_path %> to create a new prescription.</i></small>
+    <br>
+    <br>
+  <% else %>
+    <%= link_to "Create New Prescription", new_prescription_path %>
+  <% end %>
+  <% @prescriptions.each do |prescription| %>
+    <ul>
+      <li>
+        <small><i>Patient:</i></small> <%= link_to prescription.appointment.patient.full_name, patient_path(prescription.appointment.patient) %>
+      </li>
+      <li>
+        <small><i>Drug:</i></small> <%= prescription.drug %>
+      </li>
+      <li>
+        <small><i>Dosage:</i></small> <%= prescription.dosage_in_milligrams %> mg
+      </li>
+      <li>
+        <small><i>Reason:</i></small> <%= prescription.appointment.ailment.description %>
+      </li>
+      <li>
+        <small><i>Appointment Date:</i></small> <%= link_to prescription.appointment.scheduled_for.strftime("%b. %-d, %Y"), appointment_path(prescription.appointment) %>
+      </li>
+        <small><i><%= link_to "edit this prescription", edit_prescription_path(prescription) %></i></small>
+      <%= form_tag prescription_path(prescription), method: 'delete' do %>
+        <%= hidden_field_tag "id", prescription.id %>
+        <%= submit_tag "Cancel Prescription" %>
+      <% end %>
+    </ul>
+  <% end %>
+  <br>
+<% end %>
+<br>
+<%= link_to "All Medical Specialties", specialties_path %>
+<br>
+<%= link_to "All Registered Physicians", doctors_path %>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MedicalDirectoryFinalRailsProject</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <i><h1>Benjamin's Medical Directory</h1></i>
+    <% if logged_in? %>
+      - Account:
+      <% if current_user.role_type == "Doctor" %>
+        <%= link_to current_user.email, specialty_doctor_path(current_user.role.specialty, current_user.role) %> <small>(<%= link_to "edit", doctor_edit_path(current_user) %>)</small>
+      <% else %>
+        <%= link_to current_user.email, patient_path(current_user.role) %> <small>(<%= link_to "edit", patient_edit_path(current_user) %>)</small>
+      <% end %>
+      <br>
+    <% end %>
+    ________________________________________________________________________
+    <br>
+    <br>
+    <%= yield %>
+  </body>
+
+  <footer>
+    <p>
+      <br>
+      ________________________________________________________________________
+      <br>
+      <small><%= link_to "Home", root_path %> | <%= link_to "About", about_path %><% if logged_in? %>
+         | <%= link_to "Log Out", logout_path, method: "delete" %>
+      <% end %>
+       | &copy Benjamin's Medical Directory 2018</small>
+    </p>
+  </footer>
+</html>

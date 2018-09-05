@@ -1,0 +1,58 @@
+
+# These rules apply to the Nitro Umbrella app and all components.
+
+AllCops:
+  TargetRubyVersion: 2.5
+  Exclude:
+    - 'spec/*'
+    - 'spec/**/*'
+    - 'vendor/**/*'
+    - 'db/schema.rb'
+    - 'config/**'
+    - 'config/**/*'
+    - 'bin/**'
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Lint/ScriptPermission:
+  Enabled: false
+
+Naming/FileName:
+  Exclude:
+    - 'Guardfile'
+    - 'Capfile'
+
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - io
+    - id
+    - to
+    - by
+    - 'on'
+    - in
+    - at
+
+Rails:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/RescueStandardError:
+  EnforcedStyle: implicit
+
+# Single quotes being faster is hardly measurable and only affects parse time.
+# Enforcing double quotes reduces the times where you need to change them when introducing an interpolation.
+# Use single quotes only if their semantics are needed.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma

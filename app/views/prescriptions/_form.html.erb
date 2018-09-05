@@ -1,0 +1,24 @@
+<%= form_for @prescription do |f| %>
+  <% if @prescription.errors.any? %>
+    <h3>Errors:</h3>
+    <ul class="errors">
+      <% @prescription.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+    <br>
+  <% end %>
+  Drug Name: <%= f.text_field(:drug, id: "drug") %>
+  <br>
+  <br>
+  <%= f.label "Dosage:" %>
+  <%= f.number_field(:dosage_in_milligrams, id: "dosage_in_milligrams", step: 5, min: 0) %> mg.
+  <br>
+  <br>
+  <%= f.label "Appointment:" %>
+  <%= f.collection_select(:appointment_id, Appointment.for_current_user(current_user), :id, :date_and_patient) %>
+  <br>
+  <br>
+  <br>
+  <%= f.submit "Send Prescription" %>
+<% end %>

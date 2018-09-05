@@ -1,0 +1,172 @@
+<h2><%= @patient.full_name %></h2>
+<% if current_user.role == @patient %>
+  <%= link_to "Report New Ailment", new_ailment_path %>
+  <br>
+  <% unless @ailments.empty? %>
+    <%= link_to "Schedule New Appointment", new_appointment_path %>
+    <br>
+  <% end %>
+<% end %>
+<br>
+<h3>
+  <% if current_user.role == @patient %>
+    My
+  <% end %>
+  Upcoming Appointments:
+</h3>
+<% @appointments.each do |appointment| %>
+  <ul>
+    <li>
+      <small><i>Physician:</i></small> <%= link_to "Dr. #{appointment.doctor.full_name}", specialty_doctor_path(appointment.doctor.specialty, appointment.doctor) %>
+    </li>
+    <li>
+      <small><i>Date/Time:</i></small> <%= link_to appointment.scheduled_for.strftime("%A, %b. %-d, %Y @ %l:%M %P"), appointment_path(appointment) %>
+    </li>
+    <li>
+      <small><i>Duration:</i></small> <%= appointment.duration_in_minutes %> min.
+    </li>
+    <li>
+      <small><i>Reason:</i></small> <%= appointment.ailment.description %>
+    </li>
+    <% if current_user.role == @patient || current_user.role == appointment.doctor %>
+      <%= form_tag appointment_path(appointment), method: 'delete' do %>
+        <%= hidden_field_tag "id", appointment.id %>
+        <%= submit_tag "Cancel Appointment" %>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+<% if @ailments.empty? %>
+  <small><i>You have not reported any ailments. Click <%= link_to "here", new_ailment_path %> to report a new ailment before scheduling an appointment.</i></small>
+  <br>
+  <br>
+<% elsif @appointments.empty? %>
+  <small><i>You have no scheduled appointments. Click <%= link_to "here", new_appointment_path %> to schedule a new appointment.</i></small>
+  <br>
+  <br>
+<% end %>
+<br>
+
+<h3>
+  <% if current_user.role == @patient %>
+    My
+  <% end %>
+  Medical History:
+</h3>
+<% @ailments.each do |ailment| %>
+  <ul>
+    <li>
+      <small><i>Ailment:</i></small> <%= ailment.description %>
+    </li>
+    <% if ailment.resolved_status == false %>
+      <li>
+        <small><i>Status:</i></small> This ailment has persisted for <%= ailment.time_since_first_noticed %>.
+      </li>
+      <% if current_user.role == @patient %>
+        <%= form_tag '/resolve_ailment', method: 'post' do %>
+          <%= hidden_field_tag "id", ailment.id %>
+          <%= submit_tag "Mark Resolved" %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <li>
+        <small><i>Status:</i></small> Resolved <small><i>- We're glad you're feeling better!</i></small>
+      </li>
+      <% if current_user.role == @patient %>
+        <%= form_tag '/unresolve_ailment', method: 'post' do %>
+          <%= hidden_field_tag "id", ailment.id %>
+          <%= submit_tag "Mark Unresolved" %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if current_user.role == @patient %>
+      <%= form_tag ailment_path(ailment), method: 'delete' do %>
+        <%= hidden_field_tag "id", ailment.id %>
+        <%= submit_tag "Remove" %>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+<% if @ailments.empty? %>
+  <small><i>You have not reported any ailments. Click <%= link_to "here", new_ailment_path %> to report a new ailment.</i></small>
+  <br>
+  <br>
+<% end %>
+<br>
+
+<h3>
+  <% if current_user.role == @patient %>
+    My
+  <% end %>
+  Doctors:
+</h3>
+<% if @ailments.empty? %>
+  <small><i>You have not reported any ailments. Click <%= link_to "here", new_ailment_path %> to report a new ailment before scheduling an appointment.</i></small>
+  <br>
+  <br>
+<% elsif @appointments.empty? %>
+  <small><i>You have no scheduled appointments. Click <%= link_to "here", new_appointment_path %> to schedule a new appointment.</i></small>
+  <br>
+  <br>
+<% end %>
+<ul>
+  <% @doctors.each do |doctor| %>
+    <li>
+      <%= link_to "Dr. #{doctor.full_name}", specialty_doctor_path(doctor.specialty, doctor) %>
+    </li>
+  <% end %>
+</ul>
+<br>
+
+<h3>
+  <% if current_user.role == @patient %>
+    My
+  <% end %>
+  Prescriptions:
+</h3>
+<% if @ailments.empty? %>
+  <small><i>You have not reported any ailments. Click <%= link_to "here", new_ailment_path %> to report a new ailment before scheduling an appointment.</i></small>
+  <br>
+  <br>
+<% elsif @appointments.empty? %>
+  <small><i>You have no scheduled appointments. Click <%= link_to "here", new_appointment_path %> to schedule a new appointment.</i></small>
+  <br>
+  <br>
+<% elsif @prescriptions.empty? %>
+  <small><i>You have no prescriptions. Click <%= link_to "here", new_appointment_path %> to schedule an appointment.</i></small>
+  <br>
+  <br>
+<% end %>
+<% @prescriptions.each do |prescription| %>
+  <ul>
+    <li>
+      <small><i>Drug:</i></small> <%= prescription.drug %>
+    </li>
+    <li>
+      <small><i>Dosage:</i></small> <%= prescription.dosage_in_milligrams %> mg
+    </li>
+    <li>
+      <small><i>Reason:</i></small> <%= prescription.appointment.ailment.description %>
+    </li>
+    <li>
+      <small><i>Physician:</i></small> <%= link_to "Dr. #{prescription.appointment.doctor.last_name}", specialty_doctor_path(prescription.appointment.doctor.specialty, prescription.appointment.doctor) %>
+    </li>
+    <li>
+      <small><i>Appointment Date:</i></small> <%= link_to prescription.appointment.scheduled_for.strftime("%b. %-d, %Y"), appointment_path(prescription.appointment) %>
+      <% if current_user.role == prescription.appointment.doctor %>
+        <small>(<%= link_to "edit", edit_prescription_path(prescription) %>)</small>
+        </li>
+        <%= form_tag prescription_path(prescription), method: 'delete' do %>
+          <%= hidden_field_tag "id", prescription.id %>
+          <%= submit_tag "Cancel Prescription" %>
+        <% end %>
+      <% else %>
+        </li>
+      <% end %>
+  </ul>
+<% end %>
+<br>
+<br>
+<%= link_to "All Medical Specialties", specialties_path %>
+<br>
+<%= link_to "All Registered Physicians", doctors_path %>
