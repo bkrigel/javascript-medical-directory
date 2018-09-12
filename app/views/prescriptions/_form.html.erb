@@ -22,3 +22,40 @@
   <br>
   <%= f.submit "Send Prescription" %>
 <% end %>
+
+
+<ul id ="prescriptionResult">
+  <li id="prescriptionPatient">
+    <small><i>Patient:</i></small>
+  </li>
+  <li id="prescriptionDrug">
+    <small><i>Drug:</i></small>
+  </li>
+  <li id="prescriptionDosage">
+    <small><i>Dosage:</i></small>
+  </li>
+  <li id="prescriptionAilment">
+    <small><i>Reason:</i></small>
+  </li>
+  <li id="prescriptionAppointment">
+    <small><i>Appointment Date:</i></small>
+  </li>
+</ul>
+
+
+<script type="text/javascript" charset="utf-8">
+  $(function addEventListenerToForm() {
+    $('#new_prescription').on("submit", function(event) {
+      event.preventDefault();
+      let values = $(this).serialize();
+      $.post('/prescriptions', values).done(function(data) {
+        let prescription = data;
+        $("#prescriptionPatient").append(prescription["appointment"]["patient"]["first_name"] + " " + prescription["appointment"]["patient"]["last_name"]);
+        $("#prescriptionDrug").append(prescription["drug"]);
+        $("#prescriptionDosage").append(prescription["dosage_in_milligrams"] + " " + "mg");
+        $("#prescriptionAilment").append(prescription["appointment"]["ailment"]["description"]);
+        $("#prescriptionAppointment").append(prescription["appointment"]["scheduled_for"]);
+      });
+    });
+  });
+</script>

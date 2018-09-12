@@ -10,5 +10,6 @@ class DoctorsController < ApplicationController
     @patients = @doctor.sort_alphabetically(@doctor.patients)
     @appointments = @doctor.sort_appointments_by_time
     @prescriptions = Prescription.for_appointments(@appointments)
+    @prescription = Prescription.new
   end
 end

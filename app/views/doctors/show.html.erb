@@ -78,11 +78,18 @@
     <br>
     <br>
   <% elsif @prescriptions.empty? && !@appointments.empty? %>
-    <small><i>You have no prescriptions. Click <%= link_to "here", new_prescription_path %> to create a new prescription.</i></small>
+    <small><i>You have no prescriptions. Create a new prescription.</i></small>
     <br>
+    <%= render 'prescriptions/form' %>
     <br>
   <% else %>
-    <%= link_to "Create New Prescription", new_prescription_path %>
+    Create New Prescription:
+    <br>
+    <br>
+    <%= render 'prescriptions/form' %>
+    <br>
+    <br>
+    Existing Prescriptions:
   <% end %>
   <% @prescriptions.each do |prescription| %>
     <ul>
