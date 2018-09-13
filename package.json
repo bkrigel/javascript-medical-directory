@@ -1,5 +1,7 @@
 {
   "name": "medical_directory_final_rails_project",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "moment": "^2.22.2"
+  }
 }

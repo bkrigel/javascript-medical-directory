@@ -3,7 +3,9 @@
 <% if current_user.role == @doctor %>
   <br>
   <br>
-  <h3>My Public Profile:</h3>
+  <h3>
+    My Public Profile:
+  </h3>
 <% end %>
 <ul>
   <li>
@@ -29,12 +31,17 @@
 <% end %>
 <br>
 <% if current_user.role == @doctor %>
-  <h3>My Upcoming Appointments:</h3>
+  <h3>
+    My Upcoming Appointments:
+  </h3>
   <% if @appointments.empty? %>
     <small><i>You have no scheduled appointments.</i></small>
     <br>
     <br>
   <% end %>
+  <div id="appointments">
+    <button id="show-appointments">Show Appointments</button>
+  </div>
   <% @appointments.each do |appointment| %>
     <ul>
       <li>
@@ -55,8 +62,20 @@
       <% end %>
     </ul>
   <% end %>
+  <script type="text/javascript" charset="utf-8">
+    $(function () {
+      $("#show-appointments").on('click', function() {
+        let id = $(this).data("id");
+        $.getJSON("/posts/" + id + "/post_data", function(data) {
+          $("#appointments").html(data["placeholder"]);
+        });
+      });
+    });
+  </script>
   <br>
-  <h3>My Patients:</h3>
+  <h3>
+    My Patients:
+  </h3>
   <% if @patients.empty? %>
     <small><i>You have no patients.</i></small>
     <br>
@@ -83,13 +102,13 @@
     <%= render 'prescriptions/form' %>
     <br>
   <% else %>
-    Create New Prescription:
+    <i>Create New Prescription</i>
     <br>
     <br>
     <%= render 'prescriptions/form' %>
     <br>
     <br>
-    Existing Prescriptions:
+    <i>Existing Prescriptions</i>
   <% end %>
   <% @prescriptions.each do |prescription| %>
     <ul>
