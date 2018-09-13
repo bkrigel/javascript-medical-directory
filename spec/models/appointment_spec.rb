@@ -1,5 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Appointment, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it "belongs to an Ailment" do
+
+  end
+
+  it "must have a scheduled time and duration" do
+
+  end
+
 end
