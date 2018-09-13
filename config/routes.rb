@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :ailments, only: [:new, :create, :destroy]
   resources :prescriptions, only: [:new, :create, :edit, :update, :destroy]
   resources :patients, only: [:show]
-  resources :appointments, only: [:new, :create, :show, :edit, :update, :destroy]
+  resources :appointments
   resources :specialties, only: [:index, :show] do
     resources :doctors, only: [:new, :create, :edit, :update, :show, :destroy]
   end

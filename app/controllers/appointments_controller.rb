@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class AppointmentsController < ApplicationController
+  def index
+    @doctor = Doctor.find_by(id: params[:doctor_id])
+    @appointments = @doctor.sort_appointments_by_time
+    render json: @appointments.to_json(include: [
+      :doctor, :patient, :ailment
+      ]), status: 201
+  end
+
   def new
     if current_user.role_type == "Patient"
       @appointment = Appointment.new
