@@ -4,9 +4,9 @@ class AppointmentsController < ApplicationController
   def index
     @doctor = Doctor.find_by(id: params[:doctor_id])
     @appointments = @doctor.sort_appointments_by_time
-    render json: @appointments.to_json(include: [
-      :doctor, :patient, :ailment
-      ]), status: 201
+    render json: @appointments.to_json(include: %i[
+                                         doctor patient ailment
+                                       ]), status: 201
   end
 
   def new
@@ -30,6 +30,7 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.find_by(id: params[:id])
     @doctor = @appointment.doctor
     @patient = @appointment.patient
+    @next_appointment = next_or_previous_appointment_for(@appointment)
     unless current_user.role == @appointment.patient ||
            current_user.role == @appointment.doctor
       redirect_to root_path
@@ -42,9 +43,7 @@ class AppointmentsController < ApplicationController
 
   def update
     @appointment = Appointment.find_by(id: params[:id])
-    unless current_user.role == @appointment.patient
-      redirect_to root_path
-    end
+    redirect_to root_path unless current_user.role == @appointment.patient
     if @appointment.update(appointment_params)
       redirect_to patient_path(@appointment.patient)
     else
@@ -81,5 +80,13 @@ private
     DateTime.strptime("#{params[:appointment][:scheduled_for]} #{params[:appointment]['scheduled_for(4i)']}:#{params[:appointment]['scheduled_for(5i)']}", "%Y-%m-%d %H:%M")
   rescue ArgumentError
     nil
+  end
+
+  def next_or_previous_appointment_for(current_doctor)
+    doctors_appointments = Appointment.where(doctor: current_user.role)
+    doctors_appointments.find_by(
+      "id > :current_doctor_id",
+      current_doctor_id: current_doctor.id
+    ) || doctors_appointments.first
   end
 end

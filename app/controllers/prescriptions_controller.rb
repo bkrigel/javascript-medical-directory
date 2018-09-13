@@ -2,9 +2,7 @@
 
 class PrescriptionsController < ApplicationController
   def new
-    unless current_user.role_type == "Doctor"
-      redirect_to root_path
-    end
+    redirect_to root_path unless current_user.role_type == "Doctor"
     @prescription = Prescription.new
   end
 
@@ -13,8 +11,8 @@ class PrescriptionsController < ApplicationController
     if @prescription.save
       # render json: prescription_payload(@prescription)
       render json: @prescription.to_json(include: [
-        appointment: { include: [:patient, :ailment] }
-        ]), status: 201
+                                           appointment: { include: %i[patient ailment] },
+                                         ]), status: 201
     else
       render :new
     end
@@ -26,9 +24,7 @@ class PrescriptionsController < ApplicationController
 
   def update
     @prescription = Prescription.find_by(id: params[:id])
-    unless current_user.role == @prescription.doctor
-      redirect_to root_path
-    end
+    redirect_to root_path unless current_user.role == @prescription.doctor
     if @prescription.update(prescription_params)
       redirect_to specialty_doctor_path(current_user.role.specialty,
                                         current_user.role)
@@ -58,12 +54,12 @@ private
     {
       prescription: {
         drug: prescription.drug,
-        dosage_in_milligrams: prescription.dosage_in_milligrams
+        dosage_in_milligrams: prescription.dosage_in_milligrams,
       },
       appointment_url: (link_to prescription.appointment.scheduled_for.strftime("%b. %-d, %Y"), appointment_path(prescription.appointment)),
       patient_url: (link_to prescription.appointment.patient.full_name, patient_path(prescription.appointment.patient)),
       ailment: prescription.appointment.ailment.description,
-      edit_prescription_url: (link_to "edit this prescription", edit_prescription_path(prescription))
+      edit_prescription_url: (link_to "edit this prescription", edit_prescription_path(prescription)),
     }
   end
 end

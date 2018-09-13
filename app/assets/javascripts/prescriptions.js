@@ -5,18 +5,19 @@ $(document).on("turbolinks:load", function() {
       let values = $(this).serialize();
       $.post('/prescriptions', values).done(function(data) {
         let prescription = data;
+        let prescriptionDisplayer = new PrescriptionDisplayer(prescription)
         $("#prescriptionPatient").append(
           `<a href="/patients/${prescription["appointment"]["patient"]["id"]}">
-          ${prescription["appointment"]["patient"]["first_name"]}  ${prescription["appointment"]["patient"]["last_name"]}</a>`
+          ${prescriptionDisplayer.displayFullName()}</a>`
         );
         $("#prescriptionDrug").append(
-          prescription["drug"]
+          prescriptionDisplayer.displayDrug()
         );
         $("#prescriptionDosage").append(
-          prescription["dosage_in_milligrams"] + " " + "mg"
+          prescriptionDisplayer.displayDosage()
         );
         $("#prescriptionAilment").append(
-          prescription["appointment"]["ailment"]["description"]
+          prescriptionDisplayer.displayAilment()
         );
         $("#prescriptionAppointment").append(
           `<a href="/appointments/${prescription["appointment"]["id"]}">

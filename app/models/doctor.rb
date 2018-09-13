@@ -4,6 +4,7 @@ class Doctor < ApplicationRecord
   belongs_to :specialty, optional: true
   has_many :appointments
   has_many :patients, through: :appointments
+  has_one :users, as: :role
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :location_city, presence: true

@@ -34,22 +34,13 @@
 </div>
 <br>
 <br>
--- <button id="next-appointment" data-patient-id="<%= @appointment.doctor.id %>">Next Appointment...</button> --
-
-<script type="text/javascript" charset="utf-8">
-$(function () {
-  $("#next-appointment").on("click", function() {
-    var nextId = parseInt($(".js-next").attr("data-id")) + 1;
-    $.getJSON("/posts/" + nextId + "/post_data", function(data) {
-      $(".authorName").text(data["author"]["name"]);
-    });
-  });
-});
-</script>
-<!-- <% if current_user.role_type == "Doctor" %>
+-- <%= link_to "Next Appointment", appointment_path(@next_appointment) %> --
+<br>
+<br>
+<% if current_user.role_type == "Doctor" %>
   <%= link_to "Patient Profile", patient_path(@appointment.patient) %>
   <br>
   <%= link_to "My Profile", specialty_doctor_path(current_user.role.specialty, current_user.role) %>
 <% else %>
   <%= link_to "Go Back to My Profile", patient_path(current_user.role) %>
-<% end %> -->
+<% end %>
