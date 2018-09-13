@@ -1,38 +1,55 @@
 <h2>Appointment Details</h2>
-- <%= link_to "Edit This Appointment", edit_appointment_path(@appointment) %>
-<br>
+
+<div id="edit">
+  - <%= link_to "Edit This Appointment", edit_appointment_path(@appointment) %>
+</div>
 <ul>
-  <li>
+  <li id="physician">
     <small><i>Physician:</i></small> <%= link_to "Dr. #{@doctor.full_name}", specialty_doctor_path(@doctor.specialty, @doctor) %>
   </li>
-  <li>
+  <li id="patient">
     <small><i>Patient:</i></small> <%= link_to @patient.full_name, patient_path(@patient) %>
   </li>
-  <li>
+  <li id="day">
     <small><i>Day:</i></small> <%= @appointment.scheduled_for.strftime("%A") %>
   </li>
-  <li>
+  <li id="date">
     <small><i>Date:</i></small> <%= @appointment.scheduled_for.strftime("%b. %d, %Y") %>
   </li>
-  <li>
+  <li id="time">
     <small><i>Time:</i></small> <%= @appointment.scheduled_for.strftime("%l:%M %P") %>
   </li>
-  <li>
+  <li id="duration">
     <small><i>Duration:</i></small> <%= @appointment.duration_in_minutes %> min.
   </li>
-  <li>
+  <li id="reason">
     <small><i>Reason:</i></small> <%= @appointment.ailment.description %>
   </li>
 </ul>
-<%= form_tag appointment_path(@appointment), method: 'delete' do %>
-  <%= hidden_field_tag "id", @appointment.id %>
-  <%= submit_tag "Cancel Appointment" %>
-<% end %>
+<div id="cancel">
+  <%= form_tag appointment_path(@appointment), method: 'delete' do %>
+    <%= hidden_field_tag "id", @appointment.id %>
+    <%= submit_tag "Cancel Appointment" %>
+  <% end %>
+</div>
 <br>
-<% if current_user.role_type == "Doctor" %>
+<br>
+-- <button id="next-appointment" data-patient-id="<%= @appointment.doctor.id %>">Next Appointment...</button> --
+
+<script type="text/javascript" charset="utf-8">
+$(function () {
+  $("#next-appointment").on("click", function() {
+    var nextId = parseInt($(".js-next").attr("data-id")) + 1;
+    $.getJSON("/posts/" + nextId + "/post_data", function(data) {
+      $(".authorName").text(data["author"]["name"]);
+    });
+  });
+});
+</script>
+<!-- <% if current_user.role_type == "Doctor" %>
   <%= link_to "Patient Profile", patient_path(@appointment.patient) %>
   <br>
   <%= link_to "My Profile", specialty_doctor_path(current_user.role.specialty, current_user.role) %>
 <% else %>
   <%= link_to "Go Back to My Profile", patient_path(current_user.role) %>
-<% end %>
+<% end %> -->
