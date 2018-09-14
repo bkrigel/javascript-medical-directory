@@ -2,7 +2,8 @@ FactoryBot.define do
 
   factory :user do
     sequence(:email){ |n| "testuser-#{n}@test.com" }
-    password "test"
+    password "testpassword"
+    password_confirmation "testpassword"
     trait(:doctor) do
       role { build(:doctor) }
     end
@@ -19,7 +20,7 @@ FactoryBot.define do
     first_name "Ben"
     last_name "Krigel"
     location_city "Washington, D.C."
-    years_in_practice { 7 }
+    years_in_practice 7
     specialty
   end
 
@@ -30,14 +31,14 @@ FactoryBot.define do
 
   factory :ailment do
     description "bloody nose"
-    first_noticed_on { 1.days.ago }
+    first_noticed_on 1.days.ago
     resolved_status false
     patient
   end
 
   factory :appointment do
-    scheduled_for { today }
-    duration_in_minutes { 1 }
+    scheduled_for 1.days.from_now
+    duration_in_minutes 1
     doctor
     patient
     ailment
@@ -45,7 +46,7 @@ FactoryBot.define do
 
   factory :prescription do
     drug "Placebo"
-    dosage_in_milligrams { 500 }
+    dosage_in_milligrams 500
     appointment
   end
 
