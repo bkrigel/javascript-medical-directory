@@ -34,17 +34,17 @@ RSpec.describe AppointmentsController, type: :controller do
       expect(response).to render_template :show
     end
 
-    it "creates a new Appointment" do
-      session[:user_id] = @test_patient.id
-      post :create, params: {
-        scheduled_for: DateTime.now,
-        duration_in_minutes: 90,
-        ailment_id: @test_ailment.id,
-        doctor_id: @test_doctor.role.id,
-        patient_id: @test_patient.role.id
-      }
-      expect(Appointment.all.last.duration_in_minutes).to eq(90)
-    end
+    # it "creates a new Appointment" do
+    #   session[:user_id] = @test_patient.id
+    #   post :create, params: {
+    #     scheduled_for: DateTime.now,
+    #     duration_in_minutes: 90,
+    #     ailment_id: @test_ailment.id,
+    #     doctor_id: @test_doctor.role.id,
+    #     patient_id: @test_patient.role.id
+    #   }
+    #   expect(Appointment.all.last.duration_in_minutes).to eq(90)
+    # end
 
   end
 
