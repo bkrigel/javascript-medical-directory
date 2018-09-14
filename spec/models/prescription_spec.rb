@@ -4,6 +4,10 @@ RSpec.describe Prescription, type: :model do
 
   describe "Prescription model" do
 
+    let(:test_doctor){
+      FactoryBot.create(:user, :doctor)
+    }
+    
     before (:each) do
       @test_doctor = FactoryBot.create(:user, :doctor)
       @test_patient = FactoryBot.create(:user, :patient)
@@ -31,7 +35,7 @@ RSpec.describe Prescription, type: :model do
       expect(v.macro).to eq(:belongs_to)
     end
 
-    it "has a valid dosage" do
+    it "has a valid dosage", :aggregate_failures do
       expect(@test_prescription).to be_valid
       @test_prescription.dosage_in_milligrams = "one hundred"
       expect(@test_prescription).to be_invalid

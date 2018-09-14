@@ -22,6 +22,7 @@ class AppointmentsController < ApplicationController
     if @appointment.save
       redirect_to patient_path(@appointment.patient)
     else
+      binding.pry
       render :new
     end
   end
@@ -78,8 +79,6 @@ private
 
   def scheduled_for
     DateTime.strptime("#{params[:appointment][:scheduled_for]} #{params[:appointment]['scheduled_for(4i)']}:#{params[:appointment]['scheduled_for(5i)']}", "%Y-%m-%d %H:%M")
-  rescue ArgumentError
-    nil
   end
 
   def next_or_previous_appointment_for(current_doctor)
