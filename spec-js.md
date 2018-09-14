@@ -8,7 +8,7 @@ Specs:
 - [x] Use your Rails API and a form to create a resource and render the response without a page refresh.
 - [x] Translate JSON responses into js model objects.
 - [x] At least one of the js model objects must have at least one method added by your code to the prototype.
-- [ ] Contains at least 2 model `rspec` test files and a controller test file that reasonably tests your public api.
+- [x] Contains at least 2 model `rspec` test files and a controller test file that reasonably tests your public api.
 
 Confirm
 - [x] You have a large number of small Git commits
